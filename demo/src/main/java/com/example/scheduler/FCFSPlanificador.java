@@ -1,42 +1,52 @@
 package com.example.scheduler;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 import com.example.model.Proceso;
 
 public class FCFSPlanificador implements Planificador {
     
+    private final Queue<Proceso> readyQueue;
+    private Proceso procesoActual;
+
+    public FCFSPlanificador() {
+        readyQueue = new LinkedList<>();
+    }
 
     @Override
     public Proceso seleccionarProceso() {
-        // Implementación del algoritmo FCFS (First-Come, First-Served)
-        Queue<Proceso> colaListos = getColaListos(); // Método para obtener la cola de procesos listos
-        if (colaListos.isEmpty()) {
-            return null; // No hay procesos para ejecutar
+        if (readyQueue.isEmpty()) {
+            return null;
         }
-        return colaListos.poll(); // Retorna el proceso seleccionado
+        return readyQueue.poll();
     }
 
+    @SuppressWarnings("unused")
     private Queue<Proceso> getColaListos() {
         // Implementación para obtener la cola de procesos listos
-
-        // Esto puede ser una estructura de datos que mantenga los procesos en orden de llegada
-        return null; // Placeholder, debe ser implementado según la estructura de datos utilizada
+        return readyQueue;
     }
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        readyQueue.add(proceso); // Agrega el proceso a la cola de listos
     }
 
     @Override
     public void ejecutarTick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.procesoActual = seleccionarProceso(); // Selecciona el proceso a ejecutar
+        while (procesoActual != null) {
+            procesoActual.ejecutar(); // Simula la ejecución del proceso actual
+            if (procesoActual.terminado()) {
+                procesoActual = null; // El proceso ha terminado
+            }
+        }
     }
 
     @Override
     public Proceso getProcesoActual() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return procesoActual;
     }
 
 }

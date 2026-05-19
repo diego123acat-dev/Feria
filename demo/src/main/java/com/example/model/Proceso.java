@@ -43,11 +43,25 @@ public class Proceso {
         this.estado = estado;
     }
 
-    public void disminuirTiempoRestante(int tiempo) {
+    private void disminuirTiempoRestante(int tiempo) {
         this.tiempoRestante -= tiempo;
         if (this.tiempoRestante <= 0) {
             this.tiempoRestante = 0;
             this.estado = EstadoProceso.TERMINATED;
         }
+    }
+
+    public void ejecutar() {
+        if (estado == EstadoProceso.NUEVO) {
+            estado = EstadoProceso.READY;
+            estado = EstadoProceso.RUNNING;
+        }else if(estado == EstadoProceso.READY){
+            estado = EstadoProceso.RUNNING;
+        }
+        disminuirTiempoRestante(1); // Simula la ejecución por un tick
+    }
+
+    public boolean terminado() {
+        return estado == EstadoProceso.TERMINATED;
     }
 }
