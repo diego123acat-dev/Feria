@@ -2,6 +2,7 @@ package com.example.scheduler;
 
 import java.util.PriorityQueue;
 
+import com.example.model.EstadoProceso;
 import com.example.model.Proceso;
 
 public class SJFPlanificador implements Planificador {
@@ -11,38 +12,47 @@ public class SJFPlanificador implements Planificador {
 
     public SJFPlanificador() {
         this.readyQueue = new PriorityQueue<>((p1, p2) -> {
-            if (p1.getTiempoEjecucion() != p2.getTiempoEjecucion()) {
-                return Integer.compare(p1.getTiempoEjecucion(), p2.getTiempoEjecucion());
+            int comparacionTiempo = Integer.compare(p1.getTiempoRestante(), p2.getTiempoRestante());
+            if (comparacionTiempo != 0) {
+                return comparacionTiempo;
             }
             return Integer.compare(p1.getId(), p2.getId());
         });
-        this.procesoActual = null;
     }
 
     @Override
     public Proceso seleccionarProceso() {
-        return readyQueue.poll();
+        Proceso proceso = readyQueue.poll();
+        if (proceso != null) {
+            proceso.setEstado(EstadoProceso.RUNNING);
+        }
+        return proceso;
     }
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        this.readyQueue.offer(proceso);
+        proceso.setEstado(EstadoProceso.READY);
+        readyQueue.offer(proceso);
     }
 
     @Override
     public void ejecutarTick() {
-        this.procesoActual = seleccionarProceso(); // Selecciona el proceso a ejecutar
-        if (procesoActual != null) {
-            procesoActual.ejecutar(); // Simula la ejecución del proceso actual
-            if (procesoActual.terminado()) {
-                procesoActual = null; // El proceso ha terminado
-            }
+        if (procesoActual == null) {
+            procesoActual = seleccionarProceso();
+        }
+
+        if (procesoActual == null) {
+            return;
+        }
+
+        procesoActual.ejecutar();
+        if (procesoActual.terminado()) {
+            procesoActual = null;
         }
     }
 
     @Override
     public Proceso getProcesoActual() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return procesoActual;
     }
-
 }

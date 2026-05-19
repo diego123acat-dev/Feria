@@ -3,10 +3,11 @@ package com.example.scheduler;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.example.model.EstadoProceso;
 import com.example.model.Proceso;
 
 public class FCFSPlanificador implements Planificador {
-    
+
     private final Queue<Proceso> readyQueue;
     private Proceso procesoActual;
 
@@ -16,31 +17,32 @@ public class FCFSPlanificador implements Planificador {
 
     @Override
     public Proceso seleccionarProceso() {
-        if (readyQueue.isEmpty()) {
-            return null;
+        Proceso proceso = readyQueue.poll();
+        if (proceso != null) {
+            proceso.setEstado(EstadoProceso.RUNNING);
         }
-        return readyQueue.poll();
-    }
-
-    @SuppressWarnings("unused")
-    private Queue<Proceso> getColaListos() {
-        // Implementación para obtener la cola de procesos listos
-        return readyQueue;
+        return proceso;
     }
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        readyQueue.add(proceso); // Agrega el proceso a la cola de listos
+        proceso.setEstado(EstadoProceso.READY);
+        readyQueue.offer(proceso);
     }
 
     @Override
     public void ejecutarTick() {
-        this.procesoActual = seleccionarProceso(); // Selecciona el proceso a ejecutar
-        while (procesoActual != null) {
-            procesoActual.ejecutar(); // Simula la ejecución del proceso actual
-            if (procesoActual.terminado()) {
-                procesoActual = null; // El proceso ha terminado
-            }
+        if (procesoActual == null) {
+            procesoActual = seleccionarProceso();
+        }
+
+        if (procesoActual == null) {
+            return;
+        }
+
+        procesoActual.ejecutar();
+        if (procesoActual.terminado()) {
+            procesoActual = null;
         }
     }
 
@@ -48,5 +50,4 @@ public class FCFSPlanificador implements Planificador {
     public Proceso getProcesoActual() {
         return procesoActual;
     }
-
 }

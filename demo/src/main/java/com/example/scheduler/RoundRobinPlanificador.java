@@ -1,7 +1,9 @@
 package com.example.scheduler;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
+import com.example.model.EstadoProceso;
 import com.example.model.Proceso;
 
 public class RoundRobinPlanificador implements Planificador {
@@ -13,52 +15,54 @@ public class RoundRobinPlanificador implements Planificador {
 
     public RoundRobinPlanificador(int quantum) {
         this.quantum = quantum;
-        this.readyQueue = new java.util.LinkedList<>();
+        this.readyQueue = new LinkedList<>();
         this.contadorQuantum = 0;
     }
 
     @Override
     public Proceso seleccionarProceso() {
-        return readyQueue.poll(); // Retorna el proceso seleccionado
+        Proceso proceso = readyQueue.poll();
+        if (proceso != null) {
+            proceso.setEstado(EstadoProceso.RUNNING);
+        }
+        return proceso;
     }
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        this.readyQueue.offer(proceso); // Agrega el proceso a la cola de listos
+        proceso.setEstado(EstadoProceso.READY);
+        readyQueue.offer(proceso);
     }
 
     @Override
     public void ejecutarTick() {
-        // 1. Si no hay proceso actual, tomar uno
         if (procesoActual == null) {
-            procesoActual = readyQueue.poll();
+            procesoActual = seleccionarProceso();
             contadorQuantum = 0;
         }
 
-        if (procesoActual == null){
+        if (procesoActual == null) {
             return;
         }
 
-        // 2. Ejecutar 1 unidad de CPU
         procesoActual.ejecutar();
         contadorQuantum++;
 
-        // 3. Si terminó el proceso
         if (procesoActual.terminado()) {
             procesoActual = null;
+            contadorQuantum = 0;
             return;
         }
 
-        // 4. Si se acabó el quantum
         if (contadorQuantum >= quantum) {
-            readyQueue.add(procesoActual); // vuelve al final
+            agregarProceso(procesoActual);
             procesoActual = null;
+            contadorQuantum = 0;
         }
     }
 
     @Override
     public Proceso getProcesoActual() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return procesoActual;
     }
-
 }

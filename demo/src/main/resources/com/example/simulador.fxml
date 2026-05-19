@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="820.0" prefWidth="1400.0"
-            xmlns="http://javafx.com/javafx/21"
+            xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.controller.SimuladorController">
 
@@ -135,7 +135,9 @@
             <!-- ================= QUEUES ================= -->
 
             <HBox spacing="20"
-                  VBox.vgrow="ALWAYS">
+                  prefHeight="260"
+                  minHeight="220"
+                  maxHeight="280">
 
                 <!-- READY -->
 
@@ -152,6 +154,7 @@
                                   -fx-font-weight: bold;" />
 
                     <ListView fx:id="listReady"
+                              prefHeight="160"
                               VBox.vgrow="ALWAYS"
                               style="-fx-background-color: #1F2937;
                                      -fx-control-inner-background: #1F2937;
@@ -174,6 +177,7 @@
                                   -fx-font-weight: bold;" />
 
                     <ListView fx:id="listBlocked"
+                              prefHeight="160"
                               VBox.vgrow="ALWAYS"
                               style="-fx-background-color: #1F2937;
                                      -fx-control-inner-background: #1F2937;" />
@@ -195,6 +199,7 @@
                                   -fx-font-weight: bold;" />
 
                     <ListView fx:id="listFinished"
+                              prefHeight="160"
                               VBox.vgrow="ALWAYS"
                               style="-fx-background-color: #1F2937;
                                      -fx-control-inner-background: #1F2937;" />
@@ -206,6 +211,7 @@
             <!-- ================= TABLE ================= -->
 
             <VBox spacing="15"
+                  VBox.vgrow="ALWAYS"
                   style="-fx-background-color: #111827;
                          -fx-background-radius: 18;
                          -fx-padding: 20;">
@@ -216,7 +222,8 @@
                               -fx-font-weight: bold;" />
 
                 <TableView fx:id="tablaProcesos"
-                           prefHeight="250">
+                           prefHeight="420"
+                           VBox.vgrow="ALWAYS">
 
                     <columns>
 
