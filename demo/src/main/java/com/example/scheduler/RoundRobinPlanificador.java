@@ -31,7 +31,7 @@ public class RoundRobinPlanificador implements Planificador {
     @Override
     public void agregarProceso(Proceso proceso) {
         proceso.setEstado(EstadoProceso.READY);
-        readyQueue.offer(proceso);
+        readyQueue.add(proceso);
     }
 
     @Override

@@ -17,9 +17,9 @@ public class App extends Application {
 
     @Override
     public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
-        scene = new Scene(loadFXML("simulador"), 1400, 820);
-        stage.setMinWidth(1100);
-        stage.setMinHeight(700);
+        scene = new Scene(loadFXML("simulador"), 1050, 680);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
         stage.setScene(scene);
         stage.show();
     }

@@ -3,299 +3,126 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="820.0" prefWidth="1400.0"
+<BorderPane prefWidth="1050.0"
+            prefHeight="680.0"
             xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.controller.SimuladorController">
-
-    <!-- ================= TOP BAR ================= -->
+            fx:controller="com.example.controller.SimuladorController"
+            style="-fx-background-color: #F3F4F6;">
 
     <top>
-        <HBox spacing="15"
-              alignment="CENTER_LEFT"
-              style="-fx-background-color: #111827;
-                     -fx-padding: 18;
-                     -fx-border-color: #1F2937;
-                     -fx-border-width: 0 0 2 0;">
+        <VBox spacing="8"
+              style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-width: 0 0 1 0;">
+            <padding>
+                <Insets top="10" right="12" bottom="10" left="12"/>
+            </padding>
 
-            <Label text="KernelSim">
-                <font>
-                    <Font size="28"/>
-                </font>
-                <style>
-                    -fx-text-fill: white;
-                    -fx-font-weight: bold;
-                </style>
-            </Label>
+            <Label text="Simulador de Planificacion de CPU"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #111827;"/>
 
-            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Algoritmo:"/>
+                <ComboBox fx:id="comboAlgoritmo" prefWidth="145"/>
 
-            <Label text="Algoritmo:"
-                   style="-fx-text-fill: #D1D5DB;
-                          -fx-font-size: 15;" />
+                <Label text="Quantum:"/>
+                <Spinner fx:id="spinnerQuantum" prefWidth="75"/>
 
-            <ComboBox fx:id="comboAlgoritmo"
-                      prefWidth="180"/>
+                <Separator orientation="VERTICAL"/>
 
-            <Label text="Quantum:"
-                   style="-fx-text-fill: #D1D5DB;
-                          -fx-font-size: 15;" />
+                <Button fx:id="btnAgregarProceso" text="+ Proceso"/>
+                <Button fx:id="btnGenerar" text="Generar 10"/>
 
-            <Spinner fx:id="spinnerQuantum"
-                     prefWidth="90"/>
+                <Separator orientation="VERTICAL"/>
 
-            <Button fx:id="btnIniciar"
-                    text="Iniciar"
-                    style="-fx-background-color: #10B981;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 10;" />
+                <Button fx:id="btnIniciar" text="Iniciar"
+                        style="-fx-background-color: #16A34A; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button fx:id="btnPausar" text="Pausar"/>
+                <Button fx:id="btnDetener" text="Reiniciar"
+                        style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-            <Button fx:id="btnPausar"
-                    text="Pausar"
-                    style="-fx-background-color: #F59E0B;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 10;" />
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <Button fx:id="btnDetener"
-                    text="Detener"
-                    style="-fx-background-color: #EF4444;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 10;" />
-            
-            <Button fx:id="btnAgregarProceso"
-        text="+ Proceso"
-        style="-fx-background-color: #3B82F6;
-               -fx-text-fill: white;
-               -fx-font-weight: bold;
-               -fx-background-radius: 10;" />
-
-        </HBox>
+                <Label fx:id="lblTiempo" text="Tiempo: 0"
+                       style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                <Label fx:id="lblCPU" text="CPU: 0%"
+                       style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+            </HBox>
+        </VBox>
     </top>
 
-    <!-- ================= CENTER ================= -->
+    <left>
+        <VBox spacing="10" prefWidth="310.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #D1D5DB; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
 
-    <center>
-
-        <VBox spacing="20"
-              style="-fx-background-color: #0F172A;
-                     -fx-padding: 20;">
-
-            <!-- ================= CPU PANEL ================= -->
-
-            <VBox spacing="15"
-                  style="-fx-background-color: #111827;
-                         -fx-background-radius: 18;
-                         -fx-padding: 20;
-                         -fx-border-color: #1E293B;
-                         -fx-border-radius: 18;">
-
-                <Label text="CPU"
-                       style="-fx-text-fill: white;
-                              -fx-font-size: 24;
-                              -fx-font-weight: bold;" />
-
-                <HBox spacing="20"
-                      alignment="CENTER_LEFT">
-
-                    <VBox spacing="10">
-
-                        <Label text="Proceso en ejecución"
-                               style="-fx-text-fill: #9CA3AF;
-                                      -fx-font-size: 15;" />
-
-                        <Label fx:id="lblProcesoActual"
-                               text="IDLE"
-                               style="-fx-text-fill: #10B981;
-                                      -fx-font-size: 32;
-                                      -fx-font-weight: bold;" />
-                    </VBox>
-
-                    <Region HBox.hgrow="ALWAYS"/>
-
-                    <VBox spacing="10">
-
-                        <Label text="Quantum"
-                               style="-fx-text-fill: #9CA3AF;
-                                      -fx-font-size: 15;" />
-
-                        <ProgressBar fx:id="progressQuantum"
-                                     prefWidth="250"
-                                     progress="0.0"/>
-                    </VBox>
-
+            <VBox spacing="6">
+                <Label text="CPU" style="-fx-font-size: 15; -fx-font-weight: bold;"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Ejecutando:"/>
+                    <Label fx:id="lblProcesoActual" text="IDLE"
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
                 </HBox>
-
+                <Label text="Progreso de quantum"/>
+                <ProgressBar fx:id="progressQuantum" prefWidth="285" progress="0.0"/>
             </VBox>
 
-            <!-- ================= QUEUES ================= -->
+            <Separator/>
 
-            <HBox spacing="20"
-                  prefHeight="260"
-                  minHeight="220"
-                  maxHeight="280">
-
-                <!-- READY -->
-
-                <VBox spacing="12"
-                      prefWidth="400"
-                      VBox.vgrow="ALWAYS"
-                      style="-fx-background-color: #111827;
-                             -fx-background-radius: 18;
-                             -fx-padding: 18;">
-
-                    <Label text="READY QUEUE"
-                           style="-fx-text-fill: #60A5FA;
-                                  -fx-font-size: 22;
-                                  -fx-font-weight: bold;" />
-
-                    <ListView fx:id="listReady"
-                              prefHeight="160"
-                              VBox.vgrow="ALWAYS"
-                              style="-fx-background-color: #1F2937;
-                                     -fx-control-inner-background: #1F2937;
-                                     -fx-text-fill: white;" />
-
+            <HBox spacing="8" VBox.vgrow="ALWAYS">
+                <VBox spacing="4" prefWidth="92" HBox.hgrow="ALWAYS">
+                    <Label text="Ready" style="-fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                    <ListView fx:id="listReady" prefHeight="150"/>
                 </VBox>
-
-                <!-- BLOCKED -->
-
-                <VBox spacing="12"
-                      prefWidth="400"
-                      VBox.vgrow="ALWAYS"
-                      style="-fx-background-color: #111827;
-                             -fx-background-radius: 18;
-                             -fx-padding: 18;">
-
-                    <Label text="BLOCKED QUEUE"
-                           style="-fx-text-fill: #F59E0B;
-                                  -fx-font-size: 22;
-                                  -fx-font-weight: bold;" />
-
-                    <ListView fx:id="listBlocked"
-                              prefHeight="160"
-                              VBox.vgrow="ALWAYS"
-                              style="-fx-background-color: #1F2937;
-                                     -fx-control-inner-background: #1F2937;" />
-
+                <VBox spacing="4" prefWidth="92" HBox.hgrow="ALWAYS">
+                    <Label text="Blocked" style="-fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                    <ListView fx:id="listBlocked" prefHeight="150"/>
                 </VBox>
-
-                <!-- FINISHED -->
-
-                <VBox spacing="12"
-                      prefWidth="400"
-                      VBox.vgrow="ALWAYS"
-                      style="-fx-background-color: #111827;
-                             -fx-background-radius: 18;
-                             -fx-padding: 18;">
-
-                    <Label text="FINISHED"
-                           style="-fx-text-fill: #10B981;
-                                  -fx-font-size: 22;
-                                  -fx-font-weight: bold;" />
-
-                    <ListView fx:id="listFinished"
-                              prefHeight="160"
-                              VBox.vgrow="ALWAYS"
-                              style="-fx-background-color: #1F2937;
-                                     -fx-control-inner-background: #1F2937;" />
-
+                <VBox spacing="4" prefWidth="92" HBox.hgrow="ALWAYS">
+                    <Label text="Done" style="-fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
+                    <ListView fx:id="listFinished" prefHeight="150"/>
                 </VBox>
-
             </HBox>
 
-            <!-- ================= TABLE ================= -->
+            <Separator/>
 
-            <VBox spacing="15"
-                  VBox.vgrow="ALWAYS"
-                  style="-fx-background-color: #111827;
-                         -fx-background-radius: 18;
-                         -fx-padding: 20;">
-
-                <Label text="TABLA DE PROCESOS"
-                       style="-fx-text-fill: white;
-                              -fx-font-size: 22;
-                              -fx-font-weight: bold;" />
-
-                <TableView fx:id="tablaProcesos"
-                           prefHeight="420"
-                           VBox.vgrow="ALWAYS">
-
-                    <columns>
-
-                        <TableColumn fx:id="colPID"
-                                     text="PID"
-                                     prefWidth="80"/>
-
-                        <TableColumn fx:id="colNombre"
-                                     text="Nombre"
-                                     prefWidth="150"/>
-
-                        <TableColumn fx:id="colEstado"
-                                     text="Estado"
-                                     prefWidth="180"/>
-
-                        <TableColumn fx:id="colTiempoTotal"
-                                     text="Tiempo Total"
-                                     prefWidth="150"/>
-
-                        <TableColumn fx:id="colTiempoRestante"
-                                     text="Tiempo Restante"
-                                     prefWidth="170"/>
-
-                        <TableColumn fx:id="colPrioridad"
-                                     text="Prioridad"
-                                     prefWidth="120"/>
-
-                        <TableColumn fx:id="colLlegada"
-                                     text="Llegada"
-                                     prefWidth="120"/>
-
-                    </columns>
-
-                </TableView>
-
-            </VBox>
-
+            <Label text="Procesos" style="-fx-font-size: 15; -fx-font-weight: bold;"/>
+            <TableView fx:id="tablaProcesos" prefHeight="285" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colPID" text="PID" prefWidth="45"/>
+                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="85"/>
+                    <TableColumn fx:id="colLlegada" text="Lleg." prefWidth="55"/>
+                    <TableColumn fx:id="colTiempoTotal" text="Total" prefWidth="55"/>
+                    <TableColumn fx:id="colTiempoRestante" text="Rest." prefWidth="55"/>
+                </columns>
+            </TableView>
         </VBox>
+    </left>
 
+    <center>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+
+            <Label text="Diagrama de Gantt"
+                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #4B5563;"/>
+            <Label text="Cada fila es un proceso. Cada columna es una unidad de tiempo."
+                   style="-fx-text-fill: #6B7280;"/>
+
+            <ScrollPane fitToHeight="false"
+                        fitToWidth="false"
+                        pannable="true"
+                        VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent;">
+                <content>
+                    <GridPane fx:id="gridGantt"
+                              hgap="3"
+                              vgap="4"
+                              style="-fx-background-color: white; -fx-padding: 12;"/>
+                </content>
+            </ScrollPane>
+        </VBox>
     </center>
-
-    <!-- ================= BOTTOM ================= -->
-
-    <bottom>
-
-        <HBox spacing="40"
-              alignment="CENTER_LEFT"
-              style="-fx-background-color: #111827;
-                     -fx-padding: 18;
-                     -fx-border-color: #1F2937;
-                     -fx-border-width: 2 0 0 0;">
-
-            <Label fx:id="lblTiempoSistema"
-                   text="Tiempo Sistema: 0"
-                   style="-fx-text-fill: white;
-                          -fx-font-size: 16;
-                          -fx-font-weight: bold;" />
-
-            <Label fx:id="lblProcesosActivos"
-                   text="Procesos Activos: 0"
-                   style="-fx-text-fill: white;
-                          -fx-font-size: 16;
-                          -fx-font-weight: bold;" />
-
-            <Label fx:id="lblCPU"
-                   text="Uso CPU: 0%"
-                   style="-fx-text-fill: white;
-                          -fx-font-size: 16;
-                          -fx-font-weight: bold;" />
-
-        </HBox>
-
-    </bottom>
-
 </BorderPane>
